@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>part-1-basic-concepts.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<style TYPE="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
+<h1 id="part-1-basic-concepts">Part 1: Basic Concepts</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#bias-variance-tradeoff">Bias-Variance Tradeoff</a></li>
+<li><a href="#underfitting-vs-overfitting">Underfitting vs. Overfitting</a>
+<ul>
+<li><a href="#cross-validation">Cross-Validation</a></li>
+<li><a href="#fixing-high-bias-underfitting">Fixing High Bias (Underfitting)</a></li>
+<li><a href="#fixing-high-variance-overfitting">Fixing High Variance (Overfitting)</a></li>
+</ul>
+</li>
+<li><a href="#ensemble-methods">Ensemble Methods</a></li>
+<li><a href="#loss-functions">Loss Functions</a></li>
+<li><a href="#confusion-matrix">Confusion Matrix</a>
+<ol>
+<li>Accuracy</li>
+<li>Recall</li>
+<li>Precision</li>
+</ol>
+</li>
+<li><a href="#roc-curves-pr-curves">ROC Curves, PR Curves</a></li>
+</ul>
+<h2 id="bias-variance-tradeoff">Bias-Variance Tradeoff</h2>
+<img src="./res/bias-and-variance.png" alt="" width="400">
+<p>Decomposition of <strong>Expected Test Error</strong>:</p>
+<div>
+$$
+\begin{align*}
+\underbrace{\mathbb{E}_{x, y, D} \left[ \left( h_D(x) - y \right)^2 \right]}_{\text{Expected Test Error}} 
+&= \underbrace{\mathbb{E}_{x, D} \left[ \left( h_D(x) - \bar{h}(x) \right)^2 \right]}_{\text{Variance}} 
++ \underbrace{\mathbb{E}_{x, y} \left[ \left( \bar{y}(x) - y \right)^2 \right]}_{\text{Noise}} 
++ \underbrace{\mathbb{E}_x \left[ \left( \bar{h}(x) - \bar{y}(x) \right)^2 \right]}_{\text{Bias}^2}
+\end{align*}
+$$
+</div>
+<ul>
+<li><strong>Variance</strong>: How &quot;over-specialized&quot; (overfitting) is your classifier to a particular training set?</li>
+<li><strong>Bias</strong>: What is the inherent error that you obtain from your classifier even with infinite training data?
+<ul>
+<li>Inherent to model</li>
+</ul>
+</li>
+<li><strong>Noise</strong>: How big is the data-intrinsic noise?
+<ul>
+<li>Inherent to data</li>
+</ul>
+</li>
+</ul>
+<h2 id="underfitting-vs-overfitting">Underfitting vs. Overfitting</h2>
+<img src="./res/bias_and_variance_contributing_to_total_error.png" alt="" width="400">
+<table>
+<thead>
+<tr>
+<th><strong>Characteristic</strong></th>
+<th><strong>Overfitting</strong></th>
+<th><strong>Underfitting</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Training Error</strong></td>
+<td>Low</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Validation/Test Error</strong></td>
+<td>High</td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Model Complexity</strong></td>
+<td>Too complex</td>
+<td>Too simple</td>
+</tr>
+<tr>
+<td><strong>Generalization</strong></td>
+<td>Poor</td>
+<td>Poor</td>
+</tr>
+<tr>
+<td><strong>Bias vs. Variance</strong></td>
+<td>Low bias, high variance</td>
+<td>High bias, low variance</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cross-validation">Cross-Validation</h2>
+<h3 id="process">Process</h3>
+<ol>
+<li>Split the dataset into <strong>k-folds</strong> (e.g., 5 or 10)</li>
+<li>Train the model on $k-1$ folds and validate it on the remaining fold</li>
+<li>Repeat the process $k$ times, rotating the validation fold each time</li>
+<li>Compute the average training and validation errors across all folds</li>
+</ol>
+<h3 id="model-generalization-evaluation">Model Generalization Evaluation</h3>
+<ul>
+<li><strong>Low training error and high validation error</strong> → Overfitting</li>
+<li><strong>High training error and high validation error</strong> → Underfitting</li>
+<li><strong>Similar and low training and validation errors</strong> → Good generalization</li>
+</ul>
+<h2 id="fixing-high-bias-underfitting">Fixing <strong>High Bias</strong> (Underfitting)</h2>
+<ol>
+<li>Increase Model Complexity</li>
+<li>Decrease Regularization</li>
+<li>Add Features</li>
+<li>Increase Training Time</li>
+<li>Use Non-linear Models</li>
+</ol>
+<h2 id="fixing-high-variance-overfitting">Fixing <strong>High Variance</strong> (Overfitting)</h2>
+<ol>
+<li>Decrease Model Complexity</li>
+<li>Increase Regularization</li>
+<li>Reduce Feature Space</li>
+<li>Increase Training Data</li>
+<li>Use Early Stopping</li>
+<li>Use Ensemble Methods</li>
+</ol>
+<h2 id="balance-bias-variance-tradeoff">Balance: Bias-Variance Tradeoff</h2>
+<p>The solution often lies in striking a balance between high bias and high variance. You can experiment iteratively with:</p>
+<ul>
+<li><strong>Model selection</strong>: Trying different algorithms and architectures</li>
+<li><strong>Hyperparameter tuning</strong>: Adjusting hyperparameters like learning rate, regularization strength, or model depth</li>
+<li><strong>Feature engineering</strong>: Improving the input data to enhance model performance</li>
+</ul>
+<h2 id="ensemble-methods">Ensemble Methods</h2>
+<h3 id="characteristics">Characteristics</h3>
+<ul>
+<li><strong>(+) Improved accuracy</strong>/predictive performance</li>
+<li><strong>(+) Improved robustness</strong> to overfitting and noisy data</li>
+<li><strong>(+) Flexibility</strong> to use different types of models</li>
+<li>(-) Increased complexity (requires more computational resources)</li>
+<li>(-) Harder to interpret compared to a single model</li>
+</ul>
+<h3 id="1-bagging-bootstrap-aggregating">1. Bagging (Bootstrap Aggregating)</h3>
+<ul>
+<li>Combines bootstrapping with aggregation
+<ul>
+<li><strong>Bootstrapping</strong> is a statistical technique used to generate multiple datasets by randomly <strong>sampling (with replacement)</strong> from the original dataset. Each bootstrapped dataset is the same size as the original dataset but may contain duplicate samples.</li>
+</ul>
+</li>
+<li><strong>Reduces variance</strong></li>
+</ul>
+<h3 id="2-boosting">2. Boosting</h3>
+<ul>
+<li>Training weak learners sequentially to correct errors from the previous one</li>
+<li><strong>Reduces bias</strong></li>
+</ul>
+<h3 id="3-stacking-stacked-generalization">3. Stacking (Stacked Generalization)</h3>
+<ul>
+<li>Improves predictive power by combining predictions from multiple models</li>
+<li>A meta-model is trained on the outputs of base models</li>
+</ul>
+<h3 id="ensemble-algorithms">Ensemble Algorithms</h3>
+<ol>
+<li><strong>Random Forest</strong>: Bagging applied to decision trees</li>
+<li><strong>AdaBoost</strong>: Boosting algorithm that combines decision trees or stumps</li>
+<li><strong>Gradient Boosting Machines (GBM)</strong>: Sequential training to minimize loss</li>
+<li><strong>XGBoost</strong>, <strong>LightGBM</strong>, <strong>CatBoost</strong>: Optimized implementations of gradient boosting with faster training and improved accuracy</li>
+</ol>
+<h2 id="loss-functions">Loss functions</h2>
+<h2 id="confusion-matrix">Confusion Matrix</h2>
+<img src="./res/confusion-matrix.png" alt="" width="400">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Predicted Positive</th>
+<th>Predicted Negative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>True Positive</strong></td>
+<td>TP</td>
+<td>FN</td>
+</tr>
+<tr>
+<td><strong>True Negative</strong></td>
+<td>FP</td>
+<td>TN</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>
+<p><strong>Accuracy</strong>:</p>
+<ul>
+<li>Formula: $$(TP + TN) / \text{all}$$</li>
+<li>Measures how many cases (both positive and negative) are correctly classified</li>
+</ul>
+</li>
+<li>
+<p><strong>Recall (Sensitivity/True Positive Rate)</strong>:</p>
+<ul>
+<li>Formula: $$TP / (TP + FN)$$</li>
+<li>Measures how many actual positive cases are correctly classified</li>
+<li>Sensitive to imbalanced data</li>
+</ul>
+</li>
+<li>
+<p><strong>Precision</strong>:</p>
+<ul>
+<li>Formula: $$TP / (TP + FP)$$</li>
+<li>Measures how many predicted positive cases are actually correct</li>
+</ul>
+</li>
+<li>
+<p><strong>High Recall, Low Precision</strong>:</p>
+<ul>
+<li>Many false positives but few false negatives (good for detection)</li>
+</ul>
+<p><strong>Low Recall, High Precision</strong>:</p>
+<ul>
+<li>Few false positives but many false negatives (good for trustworthiness)</li>
+</ul>
+</li>
+<li>
+<p><strong>F1 Score</strong>:</p>
+<ul>
+<li>Formula: $$2 \cdot \frac{\text{recall} \cdot \text{precision}}{\text{recall} + \text{precision}}$$</li>
+<li>Harmonic mean of recall and precision, useful for imbalanced datasets</li>
+</ul>
+</li>
+<li>
+<p><strong>Specificity (True Negative Rate)</strong>:</p>
+<ul>
+<li>Formula: $$TN / (TN + FP)$$</li>
+<li>Measures the ability to correctly classify negatives</li>
+</ul>
+</li>
+<li>
+<p>Severity of <strong>False Positives vs. False Negatives</strong>:</p>
+<ul>
+<li><strong>False Positives</strong> are worse in cases like:
+<ul>
+<li>Non-contagious diseases (unnecessary treatment)</li>
+<li>HIV tests (psychological impact)</li>
+</ul>
+</li>
+<li><strong>False Negatives</strong> are worse in cases like:
+<ul>
+<li>Early treatment importance</li>
+<li>Quality control defects</li>
+<li>Software testing (critical errors missed)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="roc-curves-pr-curves">ROC Curves, PR Curves</h2>
+<h3 id="roc-receiver-operating-characteristic-curves">ROC (Receiver Operating Characteristic) Curves</h3>
+<img src="./res/roc-curve.png" alt="" width="250">
+<ul>
+<li>ROC curve plots <strong>recall (TPR)</strong> vs. <strong>1 - specificity (FPR)</strong></li>
+<li><strong>AUC (Area Under the Curve)</strong>:
+<ul>
+<li>AUC near 1 indicates a good model</li>
+<li>AUC near 0.5 indicates a model performing like random guessing</li>
+</ul>
+</li>
+</ul>
+<h3 id="precision-recall-curves">Precision-Recall Curves</h3>
+<img src="./res/pr-curve.png" alt="" width="250">
+<ul>
+<li>
+<p>PR curves are preferred when the dataset is highly imbalanced or when the focus is on the minority class detection</p>
+</li>
+<li>
+<p>Ignores true negatives; Used when classifier specificity is not a concern</p>
+</li>
+<li>
+<p><strong>AUC-PR (Area Under the PR Curve)</strong>:</p>
+<ul>
+<li>A higher AUC-PR indicates better performance</li>
+<li>Point 1: <strong>Low Recall, High Precision</strong></li>
+<li>Point 2: Perfect model</li>
+<li>Point 3: <strong>High Recall, Low Precision</strong></li>
+<li>Point 4: Trade-off</li>
+</ul>
+</li>
+</ul>
+
+</body>
+</html>
