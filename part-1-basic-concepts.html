@@ -396,18 +396,26 @@ MathJax.Hub.Queue(function() {
 </ul>
 </li>
 <li><a href="#ensemble-methods">Ensemble Methods</a></li>
-<li><a href="#loss-functions">Loss Functions</a></li>
+<li><a href="#loss-functions">Loss Functions</a>
+<ul>
+<li><a href="#loss-functions-for-classification">Loss Functions for <em>Classification</em></a></li>
+<li><a href="#loss-functions-for-regression">Loss Functions for <em>Regression</em></a></li>
+<li><a href="#mle-vs-loss-functions">MLE vs. Loss Functions</a></li>
+<li><a href="#batch-learning-vs-online-learning">Batch Learning vs. Online Learning</a></li>
+</ul>
+</li>
 <li><a href="#confusion-matrix">Confusion Matrix</a>
-<ol>
+<ul>
 <li>Accuracy</li>
 <li>Recall</li>
 <li>Precision</li>
-</ol>
+</ul>
 </li>
 <li><a href="#roc-curves-pr-curves">ROC Curves, PR Curves</a></li>
 </ul>
+<hr>
 <h2 id="bias-variance-tradeoff">Bias-Variance Tradeoff</h2>
-<img src="./res/bias-and-variance.png" alt="" width="400">
+<img src="./res/bias-and-variance.png" alt="" width="300">
 <p>Decomposition of <strong>Expected Test Error</strong>:</p>
 <div>
 $$
@@ -471,18 +479,24 @@ $$
 </tbody>
 </table>
 <h2 id="cross-validation">Cross-Validation</h2>
-<h3 id="process">Process</h3>
+<ul>
+<li>
+<p>Algorithm</p>
 <ol>
 <li>Split the dataset into <strong>k-folds</strong> (e.g., 5 or 10)</li>
 <li>Train the model on $k-1$ folds and validate it on the remaining fold</li>
 <li>Repeat the process $k$ times, rotating the validation fold each time</li>
 <li>Compute the average training and validation errors across all folds</li>
 </ol>
-<h3 id="model-generalization-evaluation">Model Generalization Evaluation</h3>
+</li>
+<li>
+<p>Model Generalization Evaluation</p>
 <ul>
-<li><strong>Low training error and high validation error</strong> → Overfitting</li>
-<li><strong>High training error and high validation error</strong> → Underfitting</li>
-<li><strong>Similar and low training and validation errors</strong> → Good generalization</li>
+<li><strong>Low</strong> training error and <strong>high</strong> validation error → <strong>Overfitting</strong></li>
+<li><strong>High</strong> training error and <strong>high</strong> validation error → <strong>Underfitting</strong></li>
+<li><strong>Similar and low</strong> training and validation errors → <strong>Good generalization</strong></li>
+</ul>
+</li>
 </ul>
 <h2 id="fixing-high-bias-underfitting">Fixing <strong>High Bias</strong> (Underfitting)</h2>
 <ol>
@@ -509,7 +523,7 @@ $$
 <li><strong>Feature engineering</strong>: Improving the input data to enhance model performance</li>
 </ul>
 <h2 id="ensemble-methods">Ensemble Methods</h2>
-<h3 id="characteristics">Characteristics</h3>
+<h3 id="pros--cons">Pros &amp; Cons</h3>
 <ul>
 <li><strong>(+) Improved accuracy</strong>/predictive performance</li>
 <li><strong>(+) Improved robustness</strong> to overfitting and noisy data</li>
@@ -521,7 +535,8 @@ $$
 <ul>
 <li>Combines bootstrapping with aggregation
 <ul>
-<li><strong>Bootstrapping</strong> is a statistical technique used to generate multiple datasets by randomly <strong>sampling (with replacement)</strong> from the original dataset. Each bootstrapped dataset is the same size as the original dataset but may contain duplicate samples.</li>
+<li><strong>Bootstrapping</strong> is a statistical technique used to generate multiple datasets by randomly <strong>sampling (with replacement)</strong> from the original dataset</li>
+<li>Each bootstrapped dataset is the same size as the original dataset but may contain duplicate samples</li>
 </ul>
 </li>
 <li><strong>Reduces variance</strong></li>
@@ -544,8 +559,159 @@ $$
 <li><strong>XGBoost</strong>, <strong>LightGBM</strong>, <strong>CatBoost</strong>: Optimized implementations of gradient boosting with faster training and improved accuracy</li>
 </ol>
 <h2 id="loss-functions">Loss functions</h2>
+<p>Loss functions provide a mathematical framework to quantify the error between a model's <strong>predictions</strong> and the <strong>true labels</strong>.</p>
+<ul>
+<li>
+<p>$h_\theta(x)$: <strong>Predicted value</strong> (or raw model output, i.e. <strong>logits</strong>) for a given input $x$</p>
+<ul>
+<li>$h$: The hypothesis function (i.e., the model)</li>
+<li>$\theta$: Model parameters (e.g., weights, biases) learned during training</li>
+<li>$x$: Input features (a single data point or a feature vector)</li>
+</ul>
+</li>
+<li>
+<p>$y$: <strong>True value</strong> (or ground truth) corresponding to the input $x$</p>
+</li>
+</ul>
+<h3 id="loss-functions-for-classification">Loss Functions for <em>Classification</em></h3>
+<img src="./res/loss-functions.png" alt="" width="500">
+<ol>
+<li>
+<p><strong>Least Square Loss</strong>: $(h_\theta(x) - y)^2$</p>
+<ul>
+<li>Smooth and differentiable</li>
+<li>Highly affected by outliers</li>
+</ul>
+</li>
+<li>
+<p><strong>Zero-One Loss</strong>: $1{h_\theta(x) \cdot y \leq 0}$</p>
+<ul>
+<li>Rarely used in practice; Non-smooth and difficult to optimize using gradient descent</li>
+<li>Least sensitive to outliers</li>
+</ul>
+</li>
+<li>
+<p><strong>Logistic Loss</strong>: $\log(1 + \exp(-h_\theta(x) \cdot y))$</p>
+<ul>
+<li>Smooth and differentiable, suitable for optimization using gradient descent</li>
+<li>Commonly used in logistic regression for <strong>binary classification</strong> when $y \in {-1, 1}$</li>
+<li>Operates on <strong>predicted score (logit)</strong> ($h_\theta(x)$) without applying an activation function</li>
+</ul>
+</li>
+<li>
+<p><strong>Hinge Loss</strong>: $\max{1 - h_\theta(x) \cdot y, 0}$</p>
+<ul>
+<li>Smooth and differentiable, suitable for optimization using gradient descent</li>
+<li>Commonly used for <strong>SVMs</strong> to maximize the margins</li>
+</ul>
+</li>
+<li>
+<p><strong>Exponential Loss</strong>: $\exp(-h_\theta(x) \cdot y)$</p>
+<ul>
+<li>Smooth and differentiable, suitable for optimization using gradient descent</li>
+<li>Commonly used in boosting algorithms like <strong>AdaBoost</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>Cross-Entropy Loss</strong>:</p>
+<ul>
+<li>Smooth and differentiable, suitable for optimization using gradient descent</li>
+<li>Operates on <strong>probabilities</strong> ($\hat{y}$), which are derived from the logits using an activation function (e.g., sigmoid or softmax)</li>
+<li>Used for both <strong>binary and multiclass classification</strong>
+<ul>
+<li>
+<p><strong>For binary classification</strong>: $-[y \log(\hat{y}) + (1 - y) \log(1 - \hat{y})]$</p>
+<ul>
+<li>$y \in {0, 1}$</li>
+<li>$\hat{y}$ is the predicted probability (output of a sigmoid function)</li>
+</ul>
+</li>
+<li>
+<p><strong>For multiclass classification</strong>: $-\sum_{i=1}^C y_i \log(\hat{y}_i)$</p>
+<ul>
+<li>$C$ is the number of classes</li>
+<li>$y_i$ is the true label (one-hot encoded)</li>
+<li>$\hat{y}_i$ is the predicted probability (output of a softmax function)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="loss-functions-for-regression">Loss Functions for <em>Regression</em></h3>
+<ol>
+<li>
+<p><strong>Root Mean Square Error (RMSE)</strong>: $RMSE = \sqrt{\frac{1}{n} \sum_{j=1}^n (y_i - \hat{y}_i)^2}$</p>
+<ul>
+<li>Gives higher weight to large errors, useful when large errors are particularly undesirable</li>
+</ul>
+</li>
+<li>
+<p><strong>Mean Absolute Error (MAE)</strong>: $MAE = \frac{1}{n} \sum_{i=1}^n |y_i - \hat{y}_i|$</p>
+<ul>
+<li>Measures the average magnitude of errors <strong>without squaring</strong></li>
+<li>Provides a steady metric unaffected by extreme values</li>
+</ul>
+</li>
+<li>
+<p><strong>RMSE vs. MAE</strong>:</p>
+<ul>
+<li>RMSE is always greater than or equal to MAE; If all errors are equal, RMSE = MAE</li>
+<li>MAE is easier to interpret</li>
+</ul>
+</li>
+</ol>
+<h3 id="mle-vs-loss-functions">MLE vs. Loss Functions</h3>
+<ul>
+<li><strong>MLE (Maximum Likelihood Estimation)</strong> derives loss functions for probabilistic models by:
+<ul>
+<li>maximizing the likelihood of the observed data</li>
+<li>minimizing the negative log-likelihood</li>
+</ul>
+</li>
+<li>Loss functions are broader and can be used for tasks beyond probability models (e.g., regression, classification)</li>
+</ul>
+<h3 id="batch-learning-vs-online-learning">Batch Learning vs. Online Learning</h3>
+<ol>
+<li>
+<p><strong>Batch Learning</strong>:</p>
+<ul>
+<li>Learns from all the available training data at once</li>
+</ul>
+</li>
+<li>
+<p><strong>Online Learning</strong>:</p>
+<ul>
+<li>Learns gradually, processing one example (or a small batch) at a time as data becomes available</li>
+<li><strong>Error-driven approach</strong>, where the model adjusts itself after each new example is received</li>
+<li>Examples
+<ul>
+<li>Stock market prediction</li>
+<li>Email classification</li>
+<li>Recommendation systems</li>
+<li>Ad placement in a new market</li>
+</ul>
+</li>
+<li>Algorithm
+<ul>
+<li><strong>Goal</strong>: Minimize the number of mistakes made by the model over time</li>
+<li>The process is iterative and works as follows:
+<ol>
+<li>Receive an <strong>unlabeled instance</strong> $x^{(i)}$</li>
+<li>Predict the output $y' = h_\theta(x^{(i)})$</li>
+<li>Receive the <strong>true label</strong> $y^{(i)}$</li>
+<li>Suffer a <strong>loss</strong> if the prediction $y' \neq y^{(i)}$</li>
+<li>Update the <strong>parameters</strong> $\theta$ to reduce future mistakes</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 <h2 id="confusion-matrix">Confusion Matrix</h2>
-<img src="./res/confusion-matrix.png" alt="" width="400">
+<img src="./res/confusion-matrix.png" alt="" width="300">
 <table>
 <thead>
 <tr>
@@ -569,53 +735,62 @@ $$
 </table>
 <ol>
 <li>
-<p><strong>Accuracy</strong>:</p>
+<p><strong>Accuracy</strong>: $(TP + TN) / \text{all}$</p>
 <ul>
-<li>Formula: $$(TP + TN) / \text{all}$$</li>
 <li>Measures how many cases (both positive and negative) are correctly classified</li>
 </ul>
 </li>
 <li>
-<p><strong>Recall (Sensitivity/True Positive Rate)</strong>:</p>
+<p><strong>Recall (Sensitivity/True Positive Rate)</strong>: $TP / (TP + FN)$</p>
 <ul>
-<li>Formula: $$TP / (TP + FN)$$</li>
 <li>Measures how many actual positive cases are correctly classified</li>
 <li>Sensitive to imbalanced data</li>
 </ul>
 </li>
 <li>
-<p><strong>Precision</strong>:</p>
+<p><strong>Precision</strong>: $TP / (TP + FP)$</p>
 <ul>
-<li>Formula: $$TP / (TP + FP)$$</li>
 <li>Measures how many predicted positive cases are actually correct</li>
 </ul>
 </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>High Recall, Low Precision</strong></td>
+<td>Many false positives but few false negatives</td>
+<td>Good for detection</td>
+</tr>
+<tr>
+<td><strong>Low Recall, High Precision</strong></td>
+<td>Few false positives but many false negatives</td>
+<td>Good for trustworthiness</td>
+</tr>
+</tbody>
+</table>
+<ol start="4">
 <li>
-<p><strong>High Recall, Low Precision</strong>:</p>
+<p><strong>F1 Score</strong>: $2 \cdot \frac{\text{recall } \cdot \text{ precision}}{\text{recall } + \text{ precision}}$</p>
 <ul>
-<li>Many false positives but few false negatives (good for detection)</li>
-</ul>
-<p><strong>Low Recall, High Precision</strong>:</p>
-<ul>
-<li>Few false positives but many false negatives (good for trustworthiness)</li>
-</ul>
-</li>
-<li>
-<p><strong>F1 Score</strong>:</p>
-<ul>
-<li>Formula: $$2 \cdot \frac{\text{recall} \cdot \text{precision}}{\text{recall} + \text{precision}}$$</li>
 <li>Harmonic mean of recall and precision, useful for imbalanced datasets</li>
 </ul>
 </li>
 <li>
-<p><strong>Specificity (True Negative Rate)</strong>:</p>
+<p><strong>Specificity (True Negative Rate)</strong>: $TN / (TN + FP)$</p>
 <ul>
-<li>Formula: $$TN / (TN + FP)$$</li>
 <li>Measures the ability to correctly classify negatives</li>
 </ul>
 </li>
-<li>
-<p>Severity of <strong>False Positives vs. False Negatives</strong>:</p>
+</ol>
+<ul>
+<li>Severity of <strong>False Positives vs. False Negatives</strong>:
 <ul>
 <li><strong>False Positives</strong> are worse in cases like:
 <ul>
@@ -632,10 +807,10 @@ $$
 </li>
 </ul>
 </li>
-</ol>
+</ul>
 <h2 id="roc-curves-pr-curves">ROC Curves, PR Curves</h2>
 <h3 id="roc-receiver-operating-characteristic-curves">ROC (Receiver Operating Characteristic) Curves</h3>
-<img src="./res/roc-curve.png" alt="" width="250">
+<img src="./res/roc-curve.png" alt="" width="300">
 <ul>
 <li>ROC curve plots <strong>recall (TPR)</strong> vs. <strong>1 - specificity (FPR)</strong></li>
 <li><strong>AUC (Area Under the Curve)</strong>:
@@ -646,7 +821,7 @@ $$
 </li>
 </ul>
 <h3 id="precision-recall-curves">Precision-Recall Curves</h3>
-<img src="./res/pr-curve.png" alt="" width="250">
+<img src="./res/pr-curve.png" alt="" width="300">
 <ul>
 <li>
 <p>PR curves are preferred when the dataset is highly imbalanced or when the focus is on the minority class detection</p>
