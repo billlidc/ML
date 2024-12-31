@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>part-2-machine-learning-algorithms.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<style TYPE="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
+<h1 id="part-2-machine-learning-algorithms">Part 2: Machine Learning Algorithms</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#ml-problem-settings">ML Problem Settings</a>
+<ul>
+<li>
+<p><a href="#basic-assumptions-and-definitions">Basic Assumptions and Definitions</a></p>
+</li>
+<li>
+<p><a href="#optimization-gradient-descent">Optimization (Gradient Descent)</a></p>
+</li>
+<li>
+<p><a href="#deterministic--probabilistic-problems">Deterministic &amp; Probabilistic Problems</a></p>
+</li>
+<li>
+<p><a href="#paramertric-vs-non-parametric-models">Paramertric vs. Nonparametric Models</a></p>
+<ul>
+<li><a href="#parametric-models">Parametric Models</a></li>
+<li><a href="#nonparametric-models">Nonparametric Models</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#diagnose-ml-model">Diagnose ML model</a></p>
+</li>
+<li>
+<p><a href="#supervised-learning">Supervised Learning</a></p>
+</li>
+<li>
+<p><a href="#decision-tree">Decision Tree</a></p>
+</li>
+<li>
+<p><a href="#supervised-learning">Unsupervised Learning</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="ml-problem-settings">ML Problem Settings</h2>
+<h3 id="basic-assumptions-and-definitions">Basic Assumptions and Definitions</h3>
+<ol>
+<li>
+<p><strong>Probabilistic Model</strong>: The dataset is considered to be generated from an unknown probability distribution of input-output pairs.</p>
+</li>
+<li>
+<p><strong>Definition of ML</strong>:</p>
+<p>Compute a <strong>function</strong> $f$ that has low expected error $\epsilon$ over <strong>sample</strong> $D$ (from unknown distribution) with respect to <strong>loss function</strong> $L$</p>
+<ul>
+<li><strong>Key Assumption</strong>: The target function is unknown</li>
+<li><strong>Model</strong>: Defines the hypothesis space for the learning algorithm to search</li>
+<li><strong>Model Parameters</strong>: Numerical values or structures used to define hypotheses</li>
+<li><strong>Learning Algorithm</strong>: Searches the hypothesis space to minimize loss</li>
+<li><strong>Hyperparameters</strong>: Tunable model aspects not selected by the learning algorithm</li>
+<li><strong>Inductive Bias</strong>: Assumptions used by the learner to predict outputs of given inputs for unseen data</li>
+</ul>
+</li>
+<li>
+<p><strong>Structure of ML Algorithm</strong>:</p>
+<ul>
+<li><strong>Inputs (features)</strong>: $x^i \in R^n$, $ i = 1, \ldots, m$</li>
+<li><strong>Outputs (targets)</strong>: $y^i \in Y, $ $i = 1, \ldots, m$</li>
+<li><strong>Parameters</strong>: $ \theta \in R^d$</li>
+<li><strong>Hypothesis Function</strong>: $ h_\theta: R^n \to \hat{Y}$</li>
+<li><strong>Loss Function</strong>: $ \ell: \hat{Y} \times Y \to R_+$</li>
+<li><strong>Canonical Optimization Problem</strong>: $\min_{\theta \in \Theta} \frac{1}{m} \sum_{i=1}^m \ell(h_\theta(x^i), y^i)$</li>
+</ul>
+</li>
+</ol>
+<h3 id="optimization-gradient-descent">Optimization (Gradient Descent)</h3>
+<p><strong>Gradient Descent</strong> is an iterative optimization algorithm used to find the minimum of a function</p>
+<img src="./res/gradient-descent.png" alt="" width="500">
+<ul>
+<li>
+<p><strong>Algorithm</strong>: Repeatedly update weights by calculating the <strong>negative partial derivatives</strong> for each coordinate</p>
+<ul>
+<li><strong>Starting point</strong> ($w_{\text{old}}$): random or zero</li>
+<li><strong>Stopping criterion</strong>: Stop when the gradient ($\frac{\partial J}{\partial w}$) becomes close to zero or when the change in $J(w)$ is below a predefined threshold</li>
+<li><strong>Learning rate</strong> ($\alpha$): Step size</li>
+</ul>
+</li>
+<li>
+<p>Useful in cases where <strong>closed-form solutions</strong> are <em>unavailable</em> or <em>infeasible</em></p>
+<ul>
+<li>Total complexity for OLS: $O(M^2N + M^{2.373})$, where $M$ is the number of features and $N$ is the number of data points</li>
+</ul>
+</li>
+<li>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Simple to implement</li>
+<li>Widely applicable for a variety of optimization problems</li>
+</ul>
+</li>
+<li>
+<p><strong>Cons</strong>:</p>
+<ul>
+<li>Slow convergence on large datasets</li>
+<li>May find local minima instead of global minima</li>
+<li>May not be suitable for non-convex problems</li>
+</ul>
+</li>
+<li>
+<p><strong>GD Variants</strong></p>
+  <img src="./res/gd-variants.png" alt="" width="500">
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Data Processed At a Time</th>
+<th>Gradient Quality</th>
+<th>Speed</th>
+<th>Stability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Batch GD</strong></td>
+<td>Entire dataset</td>
+<td>High (accurate gradients)</td>
+<td>Slowest</td>
+<td>Very Stable</td>
+</tr>
+<tr>
+<td><strong>Mini-Batch GD</strong></td>
+<td>Batch of data points</td>
+<td>Balanced</td>
+<td>Balanced</td>
+<td>Balanced</td>
+</tr>
+<tr>
+<td><strong>Stochastic GD (SGD)</strong></td>
+<td>Single data point</td>
+<td>Noisy (approximate gradients)</td>
+<td>Fastest</td>
+<td>Less Stable</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Appendix</strong>: Complexity of matrix operations:</p>
+<ul>
+<li>Inner product $x^T y$: $O(n)$</li>
+<li>Matrix-vector product $Ax$: $O(n^2)$</li>
+<li>Matrix-matrix product $AB$: $O(n^3)$</li>
+<li>Matrix inverse $A^{-1}$: $O(n^3)$</li>
+</ul>
+</li>
+</ul>
+<h2 id="deterministic--probabilistic-problems">Deterministic &amp; Probabilistic Problems</h2>
+<p>[TODO]</p>
+<h2 id="paramertric-vs-nonparametric-models">Paramertric vs. Nonparametric Models</h2>
+<h3 id="parametric-models">Parametric Models</h3>
+<ul>
+<li>
+<p><strong>Characteristics</strong>:</p>
+<ul>
+<li>Assume a specific distribution for the data</li>
+<li>Have a fixed number of parameters</li>
+<li>Complexity of the model is <strong>bounded</strong>, regardless of the amount of data</li>
+</ul>
+</li>
+<li>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>Linear Regression</li>
+<li>Logistic Regression</li>
+<li>Linear SVM</li>
+<li>K-Means Clustering</li>
+<li>PCA</li>
+</ul>
+</li>
+</ul>
+<h3 id="nonparametric-models">Nonparametric Models</h3>
+<ul>
+<li>
+<p><strong>Characteristics</strong>:</p>
+<ul>
+<li>Do not make strong assumptions about the underlying function</li>
+<li>The number of parameters grows with the size of the training data</li>
+<li>More flexible but <strong>require more training data</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>K-Nearest Neighbor (k-NN)</li>
+<li>Decision Trees</li>
+<li>RBF Kernel SVMs</li>
+<li>Gaussian Processes (GPs)</li>
+</ul>
+</li>
+</ul>
+<h2 id="diagnose-ml-model">Diagnose ML model</h2>
+<p>[TODO]</p>
+<h2 id="supervised-learning">Supervised Learning</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Algorithm</strong></th>
+<th><strong>Hypothesis</strong></th>
+<th><strong>Loss Function</strong></th>
+<th><strong>Optimization Method</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Linear Regression</strong></td>
+<td>Linear</td>
+<td>Any regression loss</td>
+<td>Any</td>
+</tr>
+<tr>
+<td><strong>SVM</strong></td>
+<td>Linear or kernel</td>
+<td>Hinge loss</td>
+<td>Any</td>
+</tr>
+<tr>
+<td><strong>Logistic Regression</strong></td>
+<td>(Usually) linear</td>
+<td>Logistic loss</td>
+<td>Any</td>
+</tr>
+<tr>
+<td><strong>NN (Neural Networks)</strong></td>
+<td>Composed non-linear function</td>
+<td>Any</td>
+<td>(Usually) gradient descent</td>
+</tr>
+<tr>
+<td><strong>DT (Decision Tree)</strong></td>
+<td>Axis-aligned halfplanes</td>
+<td>Log probability under Bernoulli model</td>
+<td>Greedy search</td>
+</tr>
+<tr>
+<td><strong>Naive Bayes</strong></td>
+<td>Linear</td>
+<td>Joint probability of data and output</td>
+<td>Analytic solution</td>
+</tr>
+<tr>
+<td><strong>Gradient Boosting</strong></td>
+<td>Ensemble of other models</td>
+<td>Any</td>
+<td>Gradient descent</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="decision-tree">Decision Tree</h2>
+<h3 id="pros">Pros</h3>
+<ul>
+<li>Easy to interpret and visualize</li>
+<li>Computationally efficient in both time and memory</li>
+<li>Widely applicable to classification, regression, and density estimation</li>
+</ul>
+<h3 id="algorithm">Algorithm</h3>
+<ol>
+<li>Search for the best attribute (<strong>splitting criterion</strong>) to split the data</li>
+<li>Use the chosen attribute to split data into subsets</li>
+<li>Repeat steps 1 and 2 for each subset until <strong>stopping criteria</strong> are met</li>
+<li>Optionally <strong>prune</strong> the tree to prevent overfitting</li>
+</ol>
+<ul>
+<li><strong>Complexity</strong>:
+<ul>
+<li>Training: $O(MN \log N)$</li>
+<li>Prediction: $O(2^M \log N)$</li>
+</ul>
+</li>
+</ul>
+<h3 id="splitting-criteria-in-decision-trees">Splitting Criteria in Decision Trees</h3>
+<p>Splitting criteria determine the best way to split data at each node of the tree.</p>
+<ol>
+<li>
+<p><strong>Information Gain</strong></p>
+<ul>
+<li>
+<p>Measures the reduction in entropy (uncertainty)</p>
+</li>
+<li>
+<p><strong>Goal</strong>: Choose the attribute that <em>maximizes</em> the information gain after the split</p>
+  <div>
+  $$
+  IG(S, A) = Entropy(S) - \sum_{i} \frac{|S_i|}{|S|} \cdot Entropy(S_i)
+  $$
+  </div>
+<p>where:</p>
+<ul>
+<li>$S$: Original dataset</li>
+<li>$A$: Attribute being split</li>
+<li>$S_i$: Subset created by splitting $S$ on $A$</li>
+</ul>
+</li>
+<li>
+<p><strong>Entropy</strong> (for classification problems):</p>
+  <div>
+  $$
+  Entropy(S) = -\sum_{j} p_j \log_2(p_j)
+  $$
+  </div>
+<p>where $p_j$ is the proportion of class $j$ in the dataset</p>
+</li>
+<li>
+<p><strong>(+)</strong>: Works particularly well for multi-class problems</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Gini Index</strong></p>
+<ul>
+<li>
+<p>Measures the impurity of a dataset</p>
+</li>
+<li>
+<p><strong>Goal</strong>: Choose the attribute that <em>minimizes</em> the Gini Index after the split</p>
+</li>
+<li>
+<p><strong>Formula</strong>:</p>
+  <div>
+  $$
+  Gini(S) = 1 - \sum_{j} p_j^2
+  $$
+  </div>
+<p>where $p_j$ is the proportion of class $j$ in the dataset</p>
+</li>
+<li>
+<p><strong>(+)</strong>: Computationally efficient and widely used in practical implementations, especially in CART (Classification and Regression Trees)</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Rate</strong></p>
+<ul>
+<li>
+<p>Measures the misclassification error of a split</p>
+</li>
+<li>
+<p><strong>Goal</strong>: Choose the attribute that <em>minimizes</em> the error rate after the split</p>
+</li>
+<li>
+<p><strong>Formula</strong>:</p>
+  <div>
+  $$
+  Error\ Rate(S) = 1 - \max(p_j)
+  $$
+  </div>
+<p>where $p_j$ is the proportion of the majority class in the dataset</p>
+</li>
+<li>
+<p><strong>(-)</strong>: Less sensitive to changes in data distribution compared to Information Gain or Gini Index and rarely used in practice</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="stopping-criteria">Stopping Criteria</h3>
+<ul>
+<li>Splitting criterion falls below a threshold</li>
+<li>Maximum tree depth is achieved</li>
+<li>Split is not statistically significant</li>
+<li>Full tree is grown, then pruned</li>
+</ul>
+<h3 id="pruning">Pruning</h3>
+<ol>
+<li>Prepare a validation set to evaluate the impact of pruning</li>
+<li>Greedily remove nodes that improve validation accuracy</li>
+<li>Stop pruning when further pruning is detrimental</li>
+</ol>
+<h3 id="inductive-bias-in-decision-trees">Inductive Bias in Decision Trees</h3>
+<ul>
+<li><strong>ID3 Algorithm</strong> (Greedy Search):
+<ul>
+<li><strong>Smallest Tree</strong>: Assumes that smaller trees are better generalizations and less likely to overfit</li>
+<li><strong>High Mutual Information</strong>: Favors splitting on attributes that provide the most information gain (reduce uncertainty the most) near the root of the tree, ensuring that the most informative decisions are made early</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="random-forest">Random Forest</h2>
+
+</body>
+</html>
