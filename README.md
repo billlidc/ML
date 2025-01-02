@@ -23,6 +23,34 @@ My repository for machine learning note-taking and review
 
 2. **Machine Learning Algorithm**
 
+    - [ML Problem Settings](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#ml-problem-settings)
+        - [Basic Assumptions and Definitions](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#basic-assumptions-and-definitions)
+        - [Optimization (Gradient Descent)](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#optimization-gradient-descent)
+    - [Deterministic & Probabilistic Problems](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#deterministic--probabilistic-problems)
+    - [Paramertric vs. Nonparametric Models](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#paramertric-vs-non-parametric-models)
+        - [Parametric Models](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#parametric-models)
+        - [Nonparametric Models](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#nonparametric-models)
+
+    - [Diagnose ML model](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#diagnose-ml-model)
+    - [Supervised Learning](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#supervised-learning)
+        1. [Decision Tree (DT)](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#decision-tree)
+            - [Random Forest (RF)](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#random-forest-rf)
+            - [Boosting Regression Trees (Gradient Boosting)](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#boosting-regression-trees-gradient-boosting)
+            - [Boosting Classification Trees (AdaBoost)](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#boosting-classification-trees-adaboost)
+        2. [KNN (K-Nearest Neighbors) Classification](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#knn-k-nearest-neighbors-classification)
+        3. [Perceptron](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#perceptron)
+        4. [Linear Regression](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#linear-regression)
+            - [Regularization](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#regularization)
+                - Ridge Regression (L2 Regularization)
+                - Lasso Regression (L1 Regularization)
+        5. [Logistic Regression](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#logistic-regression)
+        6. [Neural Network](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#neural-network)
+        7. [Navie Bayes](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#naive-bayes)
+        8. [SVM](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#svm)
+        9. [K-Means Clustering](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#k-means-clustering)
+        10. [Time Series Forecasting](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#time-series-forecasting)
+
+
 3. **Practical Data Science Techniques**
 
 4. **ML Questions**
