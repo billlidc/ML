@@ -387,13 +387,12 @@ MathJax.Hub.Queue(function() {
 <h1 id="part-2-machine-learning-algorithms">Part 2: Machine Learning Algorithms</h1>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
-<li><a href="#ml-problem-settings">ML Problem Settings</a>
+<li>
+<p><a href="#ml-problem-settings">ML Problem Settings</a></p>
 <ul>
-<li>
-<p><a href="#basic-assumptions-and-definitions">Basic Assumptions and Definitions</a></p>
-</li>
-<li>
-<p><a href="#optimization-gradient-descent">Optimization (Gradient Descent)</a></p>
+<li><a href="#basic-assumptions-and-definitions">Basic Assumptions and Definitions</a></li>
+<li><a href="#optimization-gradient-descent">Optimization (Gradient Descent)</a></li>
+</ul>
 </li>
 <li>
 <p><a href="#deterministic--probabilistic-problems">Deterministic &amp; Probabilistic Problems</a></p>
@@ -410,14 +409,33 @@ MathJax.Hub.Queue(function() {
 </li>
 <li>
 <p><a href="#supervised-learning">Supervised Learning</a></p>
+<ol>
+<li><a href="#decision-tree">Decision Tree (DT)</a>
+<ul>
+<li><a href="#random-forest-rf">Random Forest (RF)</a></li>
+<li><a href="#boosting-regression-trees-gradient-boosting">Boosting Regression Trees (Gradient Boosting)</a></li>
+<li><a href="#boosting-classification-trees-adaboost">Boosting Classification Trees (AdaBoost)</a></li>
+</ul>
 </li>
-<li>
-<p><a href="#decision-tree">Decision Tree</a></p>
-</li>
-<li>
-<p><a href="#supervised-learning">Unsupervised Learning</a></p>
+<li><a href="#knn-k-nearest-neighbors-classification">KNN (K-Nearest Neighbors) Classification</a></li>
+<li><a href="#perceptron">Perceptron</a></li>
+<li><a href="#linear-regression">Linear Regression</a>
+<ul>
+<li><a href="#regularization">Regularization</a>
+<ul>
+<li>Ridge Regression (L2 Regularization)</li>
+<li>Lasso Regression (L1 Regularization)</li>
+</ul>
 </li>
 </ul>
+</li>
+<li><a href="#logistic-regression">Logistic Regression</a></li>
+<li><a href="#neural-network">Neural Network</a></li>
+<li><a href="#naive-bayes">Navie Bayes</a></li>
+<li><a href="#svm">SVM</a></li>
+<li><a href="#k-means-clustering">K-Means Clustering</a></li>
+<li><a href="#time-series-forecasting">Time Series Forecasting</a></li>
+</ol>
 </li>
 </ul>
 <hr>
@@ -634,7 +652,7 @@ MathJax.Hub.Queue(function() {
 </tbody>
 </table>
 <hr>
-<h2 id="decision-tree">Decision Tree</h2>
+<h2 id="decision-tree-dt">Decision Tree (DT)</h2>
 <h3 id="pros">Pros</h3>
 <ul>
 <li>Easy to interpret and visualize</li>
@@ -763,7 +781,434 @@ MathJax.Hub.Queue(function() {
 </li>
 </ul>
 <hr>
-<h2 id="random-forest">Random Forest</h2>
+<h2 id="random-forest-rf">Random Forest (RF)</h2>
+<p>Random Forest is an <strong>ensemble method</strong> that combines multiple decision trees
+using <strong>bagging</strong> and <strong>feature randomness</strong> to create a forest of uncorrelated trees</p>
+<h3 id="random-forest-process">Random Forest Process</h3>
+<ul>
+<li><strong>Bootstrap Sampling (Bagging)</strong>:
+<ul>
+<li>Draw a bootstrap dataset $D_b$ of size $n$ from training data $D$</li>
+<li>Grow a decision tree $T_b$ using $D_b$ by:
+<ol>
+<li>Selecting $p$ (typically $p \approx \sqrt{d}$) random features from $d$
+<ul>
+<li>Equivalent to vanilla bagging when $p = d$</li>
+</ul>
+</li>
+<li>Choosing the best feature among $p$ to split</li>
+<li>Recursively splitting until the stopping criterion is met (e.g., minimum leaf size)</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>Output</strong>: An ensemble of trees ${T_1, T_2, \dots, T_B}$</li>
+</ul>
+<h3 id="out-of-bag-oob-score">Out-of-Bag (OOB) Score</h3>
+<ul>
+<li><strong>Bootstrap Sampling</strong>: Each decision tree is trained on a randomly sampled subset of the training data (with replacement)</li>
+<li>On average, 63% of the original data is included in each bootstrap sample for training, while 37% of the data is left out as <strong>out-of-bag (OOB) samples</strong></li>
+<li>OOB score is calculated as:
+<ul>
+<li>the mean squared error (MSE) (for regression)</li>
+<li>the accuracy (for classification)</li>
+</ul>
+</li>
+<li>OOB score serves as an <strong>unbiased estimate</strong> of the Random Forest's generalization error without the need for additional validation datasets</li>
+</ul>
+<h3 id="interpretability-and-feature-importance">Interpretability and Feature Importance</h3>
+<ul>
+<li><strong>Trade-off</strong>: Bagging improves prediction accuracy but reduces interpretability</li>
+<li><strong>Feature Importance</strong>
+<ul>
+<li>For regression trees: Calculated as the <strong>total reduction in RSS</strong> (Residual Sum of Squares) due to splits involving a feature, averaged across all $B$ trees</li>
+<li>For classification trees: Measured by the <strong>total decrease in impurity</strong> (e.g., Gini index) caused by splits involving a feature, averaged over all $B$ trees</li>
+</ul>
+</li>
+<li>Features are ranked by the average contribution to the measures, where higher values indicate greater importance</li>
+</ul>
+<h3 id="advantages-of-random-forest">Advantages of Random Forest</h3>
+<ol>
+<li>Handles missing values and outliers</li>
+<li>Less prone to overfitting; Low bias and moderate variance</li>
+<li>Generalizes to high-dimensional data and correlated features</li>
+<li>Robust to data variations and non-linear patterns</li>
+<li>Can be trained in parallel for efficiency</li>
+<li>Does not require cross-validation to estimate error</li>
+</ol>
+<hr>
+<h2 id="boosting-regression-trees-gradient-boosting">Boosting Regression Trees (Gradient Boosting)</h2>
+<ul>
+<li>Boosting mirrors human learning by iteratively improving performance on challenging examples</li>
+<li>Examples: XGBoost, LightGBM, CatBoost</li>
+</ul>
+<h3 id="steps-to-build-boosted-regression-trees">Steps to Build Boosted Regression Trees</h3>
+<ol>
+<li>Initialize:
+<ul>
+<li>$f(x) = 0$ and residuals $r_i = y_i$ for all instances $i$ in the training set $(X, y)$</li>
+</ul>
+</li>
+<li>For each boosting iteration $b = 1, \dots, B$:
+<ol>
+<li>Fit a regression tree $T_b$ to the training data $(X, r)$
+<ul>
+<li>The tree predicts $f_b(x)$ for an instance $x$</li>
+</ul>
+</li>
+<li>Update the prediction model:
+<ul>
+<li>$f(x) \leftarrow f(x) + \lambda f_b(x)$, where $\lambda$ is the learning rate</li>
+</ul>
+</li>
+<li>Update the residuals:
+<ul>
+<li>$r_i \leftarrow r_i - \lambda f_b(x_i)$</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Output the final boosted regression model:
+<ul>
+<li>$f(x) = \sum_{b=1}^B \lambda f_b(x)$</li>
+</ul>
+</li>
+</ol>
+<h3 id="hyperparameters">Hyperparameters</h3>
+<ol>
+<li>
+<p><strong>Number of Trees ($B$):</strong></p>
+<ul>
+<li>Controls the size of the ensemble</li>
+<li><strong>Too large</strong> $B$ may lead to overfitting</li>
+</ul>
+</li>
+<li>
+<p><strong>Learning Rate ($\lambda$):</strong></p>
+<ul>
+<li>Controls how much each tree contributes to the final model</li>
+<li><strong>Small $\lambda$</strong> requires more iterations but improves model performance</li>
+</ul>
+</li>
+<li>
+<p><strong>Regularization Parameter ($h_\text{max}$ or $n_\text{min}$):</strong></p>
+<ul>
+<li>Limits tree complexity (e.g., maximum depth or minimum leaf size)</li>
+<li>Smaller trees reduce overfitting but may require a larger $B$</li>
+</ul>
+</li>
+</ol>
+<p>Practical Tips</p>
+<ul>
+<li>Hyperparameter tuning often involves cross-validation over:
+<ul>
+<li>A 3D grid of $B$, $\lambda$, and $h_\text{max}$</li>
+<li>Alternatively, fixing $B$ and searching over $\lambda$ and $h_\text{max}$ (2D grid)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="boosting-classification-trees-adaboost">Boosting Classification Trees (AdaBoost)</h2>
+<h3 id="adaboost-process">AdaBoost Process</h3>
+<ul>
+<li>
+<p>Initialize the weights $ \beta_i^{(0)} = 1/n $ for training instances $ i = 1, \dots, n $ where $ y_i \in {-1, +1} $</p>
+</li>
+<li>
+<p>For $ b = 1, \dots, B $:</p>
+<ol>
+<li>Fit a decision tree $ T_b $ to training data using weights $ \beta_i^{(b)} $. Denote the prediction function of $ T_b $ as $ f_b : \mathbf{x} \to {-1, +1} $</li>
+<li>Compute training error rate for $ f_b $ on the weighted data: <div>
+ $$
+ \text{error}_b = \frac{\sum_{i=1}^n \beta_i \cdot \mathbb{I}(y_i \neq f_b(x_i))}{\sum_{i=1}^n \beta_i}
+ $$
+ </div>
+</li>
+<li>Compute classifier weight $ \alpha_b $ for $ f_b $: <div>
+ $$
+ \alpha_b = \frac{1}{2} \log \left( \frac{1 - \text{error}_b}{\text{error}_b} \right)
+ $$
+ </div>
+</li>
+<li>Update weights of training instances: <div>
+ $$
+ \beta_i^{(b)} \gets \frac{\beta_i^{(b-1)} \cdot \exp \left[ -\alpha_b \cdot y_i \cdot f_b(x_i) \right]}{\sum_{i=1}^n \beta_i^{(b-1)} \cdot \exp \left[ -\alpha_b \cdot y_i \cdot f_b(x_i) \right]}, \quad i = 1, \dots, n
+ $$
+ </div>
+</li>
+</ol>
+</li>
+<li>
+<p>Output the boosted classification model:</p>
+  <div>
+  $$
+  f(\mathbf{x}) = \text{sign} \left( \sum_{b=1}^B \alpha_b f_b(\mathbf{x}) \right)
+  $$
+  </div>
+</li>
+</ul>
+<hr>
+<h2 id="knn-k-nearest-neighbors-classification">KNN (K-Nearest Neighbors) Classification</h2>
+<h3 id="algorithm">Algorithm</h3>
+<ol>
+<li>
+<p><strong>Training</strong>: Store the dataset $D$</p>
+<ul>
+<li>$O(1)$</li>
+</ul>
+</li>
+<li>
+<p><strong>Prediction</strong>: Assign the <strong>most common label</strong> (majority vote) of the $K$-nearest points in $D$ to a given input based on the computed distances</p>
+<ul>
+<li>
+<p>$O(MN)$, where $M$ is the number of features and $N$ is the size of the dataset</p>
+</li>
+<li>
+<p><strong>Behavior with $K$</strong>:</p>
+<ul>
+<li>Small $K$: Model may overfit</li>
+<li>Large $K$: Majority vote in $D$ dominates</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="distance-functions">Distance Functions</h3>
+<ol>
+<li>
+<p><strong>Euclidean Distance</strong>:</p>
+ <div>
+ $$
+ g(u, v) = \sqrt{\sum_{m=1}^{M} (u_m - v_m)^2}
+ $$
+ </div>
+</li>
+<li>
+<p><strong>Manhattan Distance</strong>:</p>
+ <div>
+ $$
+ g(u, v) = \sum_{m=1}^{M} |u_m - v_m|
+ $$
+ </div>
+</li>
+</ol>
+<h3 id="tuning">Tuning</h3>
+<ol>
+<li>Use different distance functions</li>
+<li>Increase $K$</li>
+<li>Remove the farthest point</li>
+<li>Apply weighted voting (give closer points higher weight)</li>
+</ol>
+<h3 id="inductive-bias-in-knn">Inductive Bias in KNN</h3>
+<ol>
+<li>Assumes that <strong>nearby points</strong> are likely to have <strong>similar labels</strong></li>
+<li>Assumes <strong>equal importance</strong> for all features (can degrade performance in high-dimensional datasets and lead to the curse of dimensionality)</li>
+</ol>
+<hr>
+<h2 id="perceptron">Perceptron</h2>
+<img src="./res/perceptron.png" alt="" width="500">
+<p><strong>Perceptron</strong> is a foundational machine learning model designed for <strong>binary classification</strong> tasks</p>
+<ul>
+<li>Uses <strong>weights</strong> for features to learn a <strong>linear decision boundary</strong></li>
+<li>Features with larger absolute weights have greater influence on prediction (requires feature scaling)</li>
+</ul>
+<h3 id="algorithm">Algorithm</h3>
+<ol>
+<li>Initialize:
+<ul>
+<li>Set all weights ($\theta$) to zero</li>
+</ul>
+</li>
+<li>While not converged:
+<ul>
+<li>For each training example $(x^i, y^i)$:
+<ul>
+<li>Predict $\hat{y} = h_\theta(x) = \text{sign}(\theta^T x)$</li>
+<li>If $\hat{y} \neq y$, update weights:
+$\theta \gets \theta + y^i x^i$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="perceptron-mistake-bound">Perceptron Mistake Bound</h3>
+<ul>
+<li>If data has a margin $\gamma$ and is within a radius $R$, the Perceptron makes at most $(R / \gamma)^2$ mistakes</li>
+<li><strong>Scaling Invariance</strong>: Scaling all inputs does not affect the number of mistakes</li>
+</ul>
+<h3 id="inductive-bias-in-perceptron">Inductive Bias in Perceptron</h3>
+<ul>
+<li>Assumes <strong>linear decision boundaries</strong></li>
+<li>Prioritizes correcting the <strong>most recent mistakes</strong> (suitable for online learning)</li>
+</ul>
+<h3 id="extensions">Extensions</h3>
+<ol>
+<li><strong>Voted Perceptron</strong>:
+<ul>
+<li>Stores all weight vectors during training; Allows weighted voting</li>
+<li>Improves generalization but memory-intensive</li>
+</ul>
+</li>
+<li><strong>Averaged Perceptron</strong>:
+<ul>
+<li>Uses running averages of weights for memory efficiency</li>
+</ul>
+</li>
+<li><strong>Kernel Perceptron</strong>:
+<ul>
+<li>Uses the <strong>kernel trick</strong> to handle non-linear decision boundaries</li>
+</ul>
+</li>
+<li><strong>Structured Perceptron</strong>:
+<ul>
+<li>Designed for tasks with exponentially large output spaces</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="linear-regression">Linear Regression</h2>
+<ul>
+<li>
+<p><strong>Linear Regression</strong> models the relationship between variables with an <strong>affine combination</strong> (linear combination where the coefficients (weights) sum to 1)</p>
+</li>
+<li>
+<p>Closed-form solution:</p>
+  <div>
+  $$ \theta = (X^T X)^{-1} X^T y $$
+  </div>
+</li>
+</ul>
+<h3 id="assumptions">Assumptions</h3>
+<ol>
+<li><strong>Linear Relationship</strong>: Independent variables are assumed to have a linear relationship with the dependent variable</li>
+<li><strong>Normal Residuals</strong>: Residuals should follow a normal distribution (check via Q-Q plot)</li>
+<li><strong>No Multicollinearity</strong>: Independent variables should not be highly correlated to ensure stable coefficient estimates</li>
+<li><strong>Homoscedasticity</strong>: Error variance should be constant across all predictor levels</li>
+<li><strong>Independent Residuals</strong>: Observations should be randomly and independently sampled</li>
+</ol>
+<h3 id="data-preparation">Data Preparation</h3>
+<ol>
+<li>Address non-linear relationships (e.g., log transformation for an exponential relationship)</li>
+<li>Clean data to remove noise</li>
+<li>Remove highly correlated variables</li>
+<li>Standardize variables for better predictions</li>
+</ol>
+<h3 id="intercept-term">Intercept Term</h3>
+<p>The <strong>intercept term</strong> in a regression model ensures that:</p>
+<ol>
+<li>
+<p><strong>Residuals have zero mean</strong>: The average difference between the observed values and the predicted values is zero, which prevents systematic overestimation or underestimation of the dependent variable</p>
+</li>
+<li>
+<p><strong>Unbiased slope estimates</strong>: The inclusion of an intercept allows the regression line to fit the data accurately, ensuring that the estimated slope coefficients are not distorted by forcing the line to pass through the origin</p>
+</li>
+</ol>
+<h3 id="model-evaluation">Model Evaluation</h3>
+<ul>
+<li><strong>R-squared/Adjusted R-squared</strong></li>
+<li><strong>F-test</strong>
+<ul>
+<li>Null Hypothese $H_0$: All regression coefficients are equal to zero</li>
+</ul>
+</li>
+<li><strong>RMSE</strong></li>
+</ul>
+<h3 id="regularization">Regularization</h3>
+<p><strong>Regularization</strong> involves adding a <strong>penalty term</strong> to the loss function in regression models to prevent overfitting and enhance generalization</p>
+<ol>
+<li>
+<p><strong>Ridge Regression (L2 Regularization)</strong></p>
+<ul>
+<li>
+<p>Penalizes the sum of squared coefficients ($|\mathbf{w}|_2^2 = \sum_j w_j^2$)</p>
+</li>
+<li>
+<p>Loss function:</p>
+  <div>
+  $$
+  \ell(\mathbf{w}) = \frac{1}{2} \|\mathbf{Xw} - \mathbf{y}\|^2 + \frac{\lambda}{2} \|\mathbf{w}\|_2^2
+  $$
+  </div>
+</li>
+<li>
+<p>Closed-form solution:</p>
+  <div>
+  $$
+  \mathbf{w} = (\mathbf{X}^T \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T \mathbf{y}
+  $$
+  </div>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Lasso Regression (L1 Regularization)</strong></p>
+<ul>
+<li>Penalizes the absolute sum of coefficients ($|\mathbf{w}|_1 = \sum_j |w_j|$)</li>
+<li>Encourages sparsity by driving some coefficients to zero, enabling feature selection</li>
+<li>No closed-form solution due to the non-differentiability of $|\mathbf{w}|_1$ at $w_j = 0$</li>
+<li>Requires <strong>subgradient optimization</strong> techniques for implementation</li>
+</ul>
+</li>
+</ol>
+<p>Practical Tips</p>
+<ul>
+<li>Proper selection of $\lambda$ balances bias and variance, optimizing model performance
+<ul>
+<li><strong>$\lambda = 0$</strong>: No regularization, reduces to standard least squares regression, might lead to overfitting</li>
+<li><strong>$\lambda \to \infty$</strong>: Coefficients approach zero, might lead to underfitting</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="logistic-regression">Logistic Regression</h2>
+<p><strong>Logistic Regression</strong> predicts the probability of a <strong>binary outcome</strong> using a linear combination of independent variables transformed by a <strong>logit function</strong></p>
+<ul>
+<li>Commonly known as the <strong>logit model</strong>, a probabilistic classifier optimized through <strong>MLE</strong></li>
+<li>Shares similarities with SVMs in separating hyperplanes, but differs in loss function</li>
+</ul>
+<h3 id="algorithm">Algorithm</h3>
+<ul>
+<li>
+<p><strong>Hypothesis Function</strong>:</p>
+  <div>
+  $$
+  p(y=1|x) = \frac{1}{1 + e^{-\theta^T x}}
+  $$
+  </div>
+<ul>
+<li>Models conditional probability using <strong>logits</strong> ($\theta^T x$)</li>
+</ul>
+</li>
+<li>
+<p><strong>Loss Function</strong>:</p>
+<ul>
+<li><strong>Logistic Loss (log-loss)</strong>: $\log(1 + e^{-h_\theta(x) \cdot y})$</li>
+<li>Optimized using <strong>gradient descent</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="multi-class-logistic-regression">Multi-class Logistic Regression</h3>
+<ul>
+<li><strong>&quot;One-vs-All&quot; Method</strong>: Creates $k$ binary classifiers for $k$ classes</li>
+<li><strong>Loss Function</strong>:
+<ul>
+<li><strong>Softmax Loss</strong>: $p(y|x) = \frac{e^{\theta_k^T x}}{\sum_{k=1}^K e^{\theta_k^T x}}$</li>
+<li>Optimized using <strong>MLE</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="neural-network">Neural Network</h2>
+<hr>
+<h2 id="navie-bayes">Navie Bayes</h2>
+<hr>
+<h2 id="svm">SVM</h2>
+<hr>
+<h2 id="k-means-clustering">K-Means Clustering</h2>
+<hr>
+<h2 id="time-series-forecasting">Time Series Forecasting</h2>
+<hr>
+<p><a href="#top">Back to top</a></p>
 
 </body>
 </html>
