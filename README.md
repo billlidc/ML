@@ -45,8 +45,8 @@ My repository for machine learning note-taking and review
                 - Lasso Regression (L1 Regularization)
         5. [Logistic Regression](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#logistic-regression)
         6. [Neural Network](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#neural-network)
-        7. [Navie Bayes](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#naive-bayes)
-        8. [SVM](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#svm)
+        7. [Naive Bayes](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#naive-bayes)
+        8. [Support Vector Machine (SVM)](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#support-vector-machine-svm)
         9. [K-Means Clustering](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#k-means-clustering)
         10. [Time Series Forecasting](https://billlidc.github.io/ML/part-2-machine-learning-algorithms#time-series-forecasting)
 

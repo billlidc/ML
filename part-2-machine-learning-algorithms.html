@@ -431,8 +431,8 @@ MathJax.Hub.Queue(function() {
 </li>
 <li><a href="#logistic-regression">Logistic Regression</a></li>
 <li><a href="#neural-network">Neural Network</a></li>
-<li><a href="#naive-bayes">Navie Bayes</a></li>
-<li><a href="#svm">SVM</a></li>
+<li><a href="#naive-bayes">Naive Bayes</a></li>
+<li><a href="#support-vector-machine-svm">Support Vector Machine (SVM)</a></li>
 <li><a href="#k-means-clustering">K-Means Clustering</a></li>
 <li><a href="#time-series-forecasting">Time Series Forecasting</a></li>
 </ol>
@@ -1200,9 +1200,290 @@ $\theta \gets \theta + y^i x^i$</li>
 <hr>
 <h2 id="neural-network">Neural Network</h2>
 <hr>
-<h2 id="navie-bayes">Navie Bayes</h2>
+<h2 id="naive-bayes">Naive Bayes</h2>
+<p><strong>Naive Bayes</strong> is a probabilistic classifier based on <strong>Bayes' theorem</strong>, assuming <strong>conditional independence</strong> among features</p>
+<h3 id="key-concepts">Key Concepts</h3>
+<ul>
+<li>
+<p><strong>Naive Bayes Assumption</strong>: Features $X_i$ are <strong>conditionally independent</strong> given $Y$:
+<div>
+$$
+P(X|Y) = \prod_{i=1}^n P(X_i|Y)
+$$
+<div></p>
+</li>
+<li>
+<p><strong>Goal</strong>: Compute $P(Y|X)$ using <strong>Bayes' theorem</strong>:
+<div>
+$$P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}$$
+</div></p>
+</li>
+</ul>
+<h3 id="algorithm">Algorithm</h3>
+<ol>
+<li>
+<p><strong>Define Distributions</strong></p>
+<ul>
+<li>
+<p>Specify the <strong>prior distribution</strong> $P(Y)$ for the class labels $Y$</p>
+</li>
+<li>
+<p>Specify the <strong>likelihood distributions</strong> $P(X_i | Y=y)$ for each feature $X_i$, conditioned on the class $Y=y$</p>
+</li>
+<li>
+<p>The distributions depend on the type of data:</p>
+<ul>
+<li><strong>Categorical Data</strong>: Use multinomial or Bernoulli distributions</li>
+<li><strong>Continuous Data</strong>: Use Gaussian (Normal) distributions</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Estimate Parameters</strong></p>
+<ul>
+<li>Use the <strong>MLE</strong> or <strong>Maximum A Posteriori (MAP)</strong> to estimate the parameters of the distributions:
+<ul>
+<li>
+<p>For $P(Y)$:
+<div>
+$$
+P(Y=y) = \frac{\text{Number of instances with } Y=y}{\text{Total number of instances}}
+$$
+</div></p>
+</li>
+<li>
+<p>For $P(X_i|Y=y)$:</p>
+<ul>
+<li>
+<p>If the feature is categorical:
+<div>
+$$
+P(X_i = x | Y = y) = \frac{\text{Count of } X_i = x \text{ and } Y = y + \alpha}{\text{Count of } Y = y + \alpha K}
+$$
+</div></p>
+<p>where</p>
+<ul>
+<li>$\alpha$: Laplace smoothing factor</li>
+<li>$K$: Number of unique categories for $X_i$</li>
+</ul>
+</li>
+<li>
+<p>If the feature is continuous:
+<div>
+$$
+P(X_i | Y = y) = \frac{1}{\sqrt{2\pi\sigma_{y,i}^2}} \exp \left( -\frac{(X_i - \mu_{y,i})^2}{2\sigma_{y,i}^2} \right)
+$$
+</div></p>
+<p>where</p>
+<ul>
+<li>$\mu_{y,i}$: Mean of $X_i$ in class $Y = y$</li>
+<li>$\sigma_{y,i}^2$: Variance of $X_i$ in class $Y = y$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Predict for Input $X$</strong></p>
+<ul>
+<li>
+<p>Compute the <strong>posterior probability</strong> for each class $y$ given the input $X = {X_1, X_2, \dots, X_n}$:
+<div>
+$$
+P(Y=y|X) \propto P(Y=y) \prod_{i=1}^n P(X_i|Y=y)
+$$
+</div></p>
+</li>
+<li>
+<p>To avoid numerical underflow, compute the <strong>log probabilities</strong>:
+<div>
+$$
+\log P(Y=y|X) \propto \log P(Y=y) + \sum_{i=1}^n \log P(X_i|Y=y)
+$$
+</div></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Select the Class</strong></p>
+<ul>
+<li>
+<p>Identify the class with the highest <strong>posterior probability</strong>:
+<div>
+$$
+y^* = \arg \max_{y \in \mathcal{Y}} P(Y=y|X)
+$$
+</div></p>
+</li>
+<li>
+<p>If using <strong>log probabilities</strong>:
+<div>
+$$
+y^* = \arg \max_{y \in \mathcal{Y}} \left( \log P(Y=y) + \sum_{i=1}^n \log P(X_i|Y=y) \right)
+$$
+</div></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Example:</p>
+<ul>
+<li>Assume you want to classify an email as <strong>Spam</strong> or <strong>Not Spam</strong></li>
+<li>$X$ represents the words in the email, and $Y$ represents the class (Spam or Not Spam)</li>
+<li>Compute $P(\text{Spam})$, $P(\text{Not Spam})$, $P(\text{Word}|\text{Spam})$, and $P(\text{Word}|\text{Not Spam})$ based on training data</li>
+<li>For a new email, calculate $P(\text{Spam|Email})$ and $P(\text{Not Spam|Email})$ and choose the class with the highest probability</li>
+</ul>
+<h3 id="laplace-smoothing">Laplace Smoothing</h3>
+<p><strong>Laplace Smoothing</strong> addresses the issue of <strong>zero probabilities</strong> in Naive Bayes classification. If a feature value never occurs with a certain class in the training data, the estimated probability is zero, which can cause the entire probability product $P(X|Y)$ to become zero, making predictions impossible.</p>
+<ul>
+<li>
+<p>For a categorical feature $j$ with $K$ unique values:
+<div>
+$$
+\phi_{j,k|y=c} = P(x_j = v_k | y = c) = \frac{\sum_{i=1}^n \mathbb{I}(x_{ij} = v_k \text{ and } y_i = c) + 1}{\sum_{i=1}^n \mathbb{I}(y_i = c) + K}
+$$
+</div></p>
+<ul>
+<li>$\phi_{j,k|y=c}$: Smoothed conditional probability</li>
+<li>$\mathbb{I}$: Indicator function (1 if true, 0 otherwise)</li>
+<li>$K$: Number of unique values for feature $j$</li>
+<li>+1: Adds a <strong>constant (pseudo-count)</strong> for each feature value, ensuring $\phi_{j,k|y=c} \neq 0$</li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>If a new word (&quot;neurips&quot;) appears in an email and was not seen during training, $P(\text{&quot;neurips&quot;}|Y) = 0$ without smoothing</li>
+<li>Laplace smoothing ensures $P(\text{&quot;neurips&quot;}|Y) \neq 0$, allowing predictions to continue without failure</li>
+</ul>
 <hr>
-<h2 id="svm">SVM</h2>
+<h2 id="support-vector-machine-svm">Support Vector Machine (SVM)</h2>
+<img src="./res/svm.png" alt="" width="500">
+<p><strong>SVM</strong> aims to find the <strong>hyperplane</strong> that <em>maximizes</em> the <strong>margin</strong> between two classes</p>
+<h3 id="algorithm">Algorithm</h3>
+<ul>
+<li><strong>Hypothesis</strong>: Linear</li>
+<li><strong>Loss</strong>: Hinge loss + Regularization term  <div>
+  $$
+  \text{minimize } \sum_{i=1}^m \max(1 - y^{(i)} \cdot \theta^T x^{(i)}, 0) + \frac{\lambda}{2} \|\theta\|^2
+  $$
+  </div>
+</li>
+<li><strong>Optimization</strong>: Quadratic programming</li>
+</ul>
+<h3 id="hyperparameters-in-svm">Hyperparameters in SVM</h3>
+<ol>
+<li>
+<p><strong>Regularization Parameter ($C$)</strong>: Balances the trade-off between maximizing the margin and minimizing the classification error</p>
+ <img src="./res/svm-c.png" alt="" width="500">
+<ul>
+<li>
+<p><strong>High $C$</strong>:</p>
+<ul>
+<li>Penalizes misclassified points heavily</li>
+<li>Results in a smaller margin, which fits the training data more closely (risk of overfitting)</li>
+</ul>
+</li>
+<li>
+<p><strong>Low $C$</strong>:</p>
+<ul>
+<li>Allows for more misclassified points</li>
+<li>Results in a larger margin, which generalizes better to unseen data (less risk of overfitting)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Gamma</strong>: Defines how far the influence of a single training example reaches, with low values meaning 'far' and high values meaning 'close'</p>
+ <img src="./res/svm-gamma.png" alt="" width="500">
+<ul>
+<li>
+<p><strong>Low Gamma</strong>:</p>
+<ul>
+<li>Each training example has a <strong>further</strong> influence</li>
+<li>The model is more flexible and captures global patterns (risk of underfitting)</li>
+</ul>
+</li>
+<li>
+<p><strong>High Gamma</strong>:</p>
+<ul>
+<li>Each training example has a <strong>closer</strong> influence</li>
+<li>The model fits closely to the training data and captures fine details (risk of overfitting)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="comparison">Comparison</h3>
+<ul>
+<li>
+<p><strong>SVM vs. Perceptron</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SVM</th>
+<th>Perceptron</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Focus</td>
+<td>Maximizes the margin</td>
+<td>Reduces error</td>
+</tr>
+<tr>
+<td>Online Training</td>
+<td>Not supported</td>
+<td>Supported</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>SVM vs. Logistic Regression</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SVM</th>
+<th>Logistic Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Margin Maximization</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Sensitivity to Outliers</td>
+<td>Less sensitive</td>
+<td>More sensitive</td>
+</tr>
+<tr>
+<td>Output Type</td>
+<td>Discrete (0 or 1)</td>
+<td>Probabilities</td>
+</tr>
+<tr>
+<td>Non-linear Decision Boundaries</td>
+<td>Supported using kernel functions</td>
+<td>Not supported</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="advantages">Advantages</h3>
+<ul>
+<li>Effective in high-dimensional spaces</li>
+<li>Can handle non-linear decision boundaries using kernel functions</li>
+</ul>
 <hr>
 <h2 id="k-means-clustering">K-Means Clustering</h2>
 <hr>

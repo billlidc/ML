@@ -44,8 +44,8 @@ MathJax.Hub.Queue(function() {
             - Lasso Regression (L1 Regularization)
     5. [Logistic Regression](#logistic-regression)
     6. [Neural Network](#neural-network)
-    7. [Navie Bayes](#naive-bayes)
-    8. [SVM](#svm)
+    7. [Naive Bayes](#naive-bayes)
+    8. [Support Vector Machine (SVM)](#support-vector-machine-svm)
     9. [K-Means Clustering](#k-means-clustering)
     10. [Time Series Forecasting](#time-series-forecasting)
 ---
@@ -589,12 +589,200 @@ Practical Tips
 ---
 
 
-## Navie Bayes
+## Naive Bayes
+
+**Naive Bayes** is a probabilistic classifier based on **Bayes' theorem**, assuming **conditional independence** among features
+
+### Key Concepts
+
+- **Naive Bayes Assumption**: Features $X_i$ are **conditionally independent** given $Y$:
+        <div>
+        $$
+        P(X|Y) = \prod_{i=1}^n P(X_i|Y)
+        $$
+        <div>
+
+- **Goal**: Compute $P(Y|X)$ using **Bayes' theorem**:
+        <div>
+        $$P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}$$
+        </div>
+
+
+### Algorithm
+
+1. **Define Distributions**
+    - Specify the **prior distribution** $P(Y)$ for the class labels $Y$
+
+    - Specify the **likelihood distributions** $P(X_i | Y=y)$ for each feature $X_i$, conditioned on the class $Y=y$
+
+    - The distributions depend on the type of data:
+        - **Categorical Data**: Use multinomial or Bernoulli distributions
+        - **Continuous Data**: Use Gaussian (Normal) distributions
+
+2. **Estimate Parameters**
+    - Use the **MLE** or **Maximum A Posteriori (MAP)** to estimate the parameters of the distributions:
+        - For $P(Y)$:
+                <div>
+                $$
+                P(Y=y) = \frac{\text{Number of instances with } Y=y}{\text{Total number of instances}}
+                $$
+                </div>
+
+        - For $P(X_i|Y=y)$:
+            - If the feature is categorical:
+                    <div>
+                    $$
+                    P(X_i = x | Y = y) = \frac{\text{Count of } X_i = x \text{ and } Y = y + \alpha}{\text{Count of } Y = y + \alpha K}
+                    $$
+                    </div>
+            
+                where
+                - $\alpha$: Laplace smoothing factor
+                - $K$: Number of unique categories for $X_i$
+            
+            - If the feature is continuous:
+                    <div>
+                    $$
+                    P(X_i | Y = y) = \frac{1}{\sqrt{2\pi\sigma_{y,i}^2}} \exp \left( -\frac{(X_i - \mu_{y,i})^2}{2\sigma_{y,i}^2} \right)
+                    $$
+                    </div>
+
+                where
+                - $\mu_{y,i}$: Mean of $X_i$ in class $Y = y$
+                - $\sigma_{y,i}^2$: Variance of $X_i$ in class $Y = y$
+
+3. **Predict for Input $X$**
+    - Compute the **posterior probability** for each class $y$ given the input $X = \{X_1, X_2, \dots, X_n\}$:
+            <div>
+            $$
+            P(Y=y|X) \propto P(Y=y) \prod_{i=1}^n P(X_i|Y=y)
+            $$
+            </div>
+
+    - To avoid numerical underflow, compute the **log probabilities**:
+            <div>
+            $$
+            \log P(Y=y|X) \propto \log P(Y=y) + \sum_{i=1}^n \log P(X_i|Y=y)
+            $$
+            </div>
+
+4. **Select the Class**
+   - Identify the class with the highest **posterior probability**:
+            <div>
+            $$
+            y^* = \arg \max_{y \in \mathcal{Y}} P(Y=y|X)
+            $$
+            </div>
+
+   - If using **log probabilities**:
+            <div>
+            $$
+            y^* = \arg \max_{y \in \mathcal{Y}} \left( \log P(Y=y) + \sum_{i=1}^n \log P(X_i|Y=y) \right)
+            $$
+            </div>
+
+Example:
+
+- Assume you want to classify an email as **Spam** or **Not Spam**
+- $X$ represents the words in the email, and $Y$ represents the class (Spam or Not Spam)
+- Compute $P(\text{Spam})$, $P(\text{Not Spam})$, $P(\text{Word}|\text{Spam})$, and $P(\text{Word}|\text{Not Spam})$ based on training data
+- For a new email, calculate $P(\text{Spam|Email})$ and $P(\text{Not Spam|Email})$ and choose the class with the highest probability
+
+
+
+### Laplace Smoothing
+
+**Laplace Smoothing** addresses the issue of **zero probabilities** in Naive Bayes classification. If a feature value never occurs with a certain class in the training data, the estimated probability is zero, which can cause the entire probability product $P(X|Y)$ to become zero, making predictions impossible.
+
+- For a categorical feature $j$ with $K$ unique values:
+        <div>
+        $$
+        \phi_{j,k|y=c} = P(x_j = v_k | y = c) = \frac{\sum_{i=1}^n \mathbb{I}(x_{ij} = v_k \text{ and } y_i = c) + 1}{\sum_{i=1}^n \mathbb{I}(y_i = c) + K}
+        $$
+        </div>
+
+    - $\phi_{j,k|y=c}$: Smoothed conditional probability
+    - $\mathbb{I}$: Indicator function (1 if true, 0 otherwise)
+    - $K$: Number of unique values for feature $j$
+    - +1: Adds a **constant (pseudo-count)** for each feature value, ensuring $\phi_{j,k|y=c} \neq 0$
+
+
+
+Example:
+
+- If a new word ("neurips") appears in an email and was not seen during training, $P(\text{"neurips"}|Y) = 0$ without smoothing
+- Laplace smoothing ensures $P(\text{"neurips"}|Y) \neq 0$, allowing predictions to continue without failure
+
 
 ---
 
 
-## SVM
+
+
+
+## Support Vector Machine (SVM)
+
+<img src="./res/svm.png" alt="" width="500">
+
+**SVM** aims to find the **hyperplane** that *maximizes* the **margin** between two classes
+
+### Algorithm
+- **Hypothesis**: Linear
+- **Loss**: Hinge loss + Regularization term
+    <div>
+    $$
+    \text{minimize } \sum_{i=1}^m \max(1 - y^{(i)} \cdot \theta^T x^{(i)}, 0) + \frac{\lambda}{2} \|\theta\|^2
+    $$
+    </div>
+- **Optimization**: Quadratic programming
+
+
+### Hyperparameters in SVM
+
+1. **Regularization Parameter ($C$)**: Balances the trade-off between maximizing the margin and minimizing the classification error
+
+    <img src="./res/svm-c.png" alt="" width="500">
+
+    - **High $C$**:
+        - Penalizes misclassified points heavily
+        - Results in a smaller margin, which fits the training data more closely (risk of overfitting)
+
+    - **Low $C$**:
+        - Allows for more misclassified points
+        - Results in a larger margin, which generalizes better to unseen data (less risk of overfitting)
+
+2. **Gamma**: Defines how far the influence of a single training example reaches, with low values meaning 'far' and high values meaning 'close'
+
+    <img src="./res/svm-gamma.png" alt="" width="500">
+    
+    - **Low Gamma**:
+        - Each training example has a **further** influence
+        - The model is more flexible and captures global patterns (risk of underfitting)
+
+    - **High Gamma**:
+        - Each training example has a **closer** influence
+        - The model fits closely to the training data and captures fine details (risk of overfitting)
+
+### Comparison
+
+- **SVM vs. Perceptron**
+    |                  | SVM                                | Perceptron                      |
+    |-------------------------|------------------------------------|---------------------------------|
+    | Focus                  | Maximizes the margin              | Reduces error                  |
+    | Online Training         | Not supported                     | Supported                      |
+
+- **SVM vs. Logistic Regression**
+    |                            | SVM                                    | Logistic Regression                       |
+    |-----------------------------------|----------------------------------------|------------------------------------------|
+    | Margin Maximization               | Yes                                    | No                                       |
+    | Sensitivity to Outliers           | Less sensitive                        | More sensitive                          |
+    | Output Type                       | Discrete (0 or 1)                     | Probabilities                           |
+    | Non-linear Decision Boundaries    | Supported using kernel functions       | Not supported                           |
+
+### Advantages
+- Effective in high-dimensional spaces
+- Can handle non-linear decision boundaries using kernel functions
+
 
 ---
 
