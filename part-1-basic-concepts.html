@@ -615,9 +615,14 @@ $$
 <li>
 <p><strong>Cross-Entropy Loss</strong>:</p>
 <ul>
-<li>Smooth and differentiable, suitable for optimization using gradient descent</li>
-<li>Operates on <strong>probabilities</strong> ($\hat{y}$), which are derived from the logits using an activation function (e.g., sigmoid or softmax)</li>
-<li>Used for both <strong>binary and multiclass classification</strong>
+<li>
+<p>Smooth and differentiable, suitable for optimization using gradient descent</p>
+</li>
+<li>
+<p>Operates on <strong>probabilities</strong> ($\hat{y}$), which are derived from the logits using an activation function (e.g., sigmoid or softmax)</p>
+</li>
+<li>
+<p>Used for both <strong>binary and multiclass classification</strong></p>
 <ul>
 <li>
 <p><strong>For binary classification</strong>: $-[y \log(\hat{y}) + (1 - y) \log(1 - \hat{y})]$</p>
@@ -711,28 +716,7 @@ $$
 </li>
 </ol>
 <h2 id="confusion-matrix">Confusion Matrix</h2>
-<img src="./res/confusion-matrix.png" alt="" width="300">
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Predicted Positive</th>
-<th>Predicted Negative</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>True Positive</strong></td>
-<td>TP</td>
-<td>FN</td>
-</tr>
-<tr>
-<td><strong>True Negative</strong></td>
-<td>FP</td>
-<td>TN</td>
-</tr>
-</tbody>
-</table>
+<img src="./res/confusion-matrix.jpg" alt="" width="500">
 <ol>
 <li>
 <p><strong>Accuracy</strong>: $(TP + TN) / \text{all}$</p>
@@ -741,16 +725,16 @@ $$
 </ul>
 </li>
 <li>
+<p><strong>Precision</strong>: $TP / (TP + FP)$</p>
+<ul>
+<li>Measures how many predicted positive cases are actually correct</li>
+</ul>
+</li>
+<li>
 <p><strong>Recall (Sensitivity/True Positive Rate)</strong>: $TP / (TP + FN)$</p>
 <ul>
 <li>Measures how many actual positive cases are correctly classified</li>
 <li>Sensitive to imbalanced data</li>
-</ul>
-</li>
-<li>
-<p><strong>Precision</strong>: $TP / (TP + FP)$</p>
-<ul>
-<li>Measures how many predicted positive cases are actually correct</li>
 </ul>
 </li>
 </ol>
